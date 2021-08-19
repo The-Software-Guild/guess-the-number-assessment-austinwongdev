@@ -69,27 +69,34 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         return game.getGameId();
     }
 
+    /**
+     * Adds a round to the database while leaving game status as in-progress
+     * @param round - GameRound object to add to the database
+     * @return - GameRound object added to database
+     */
     @Override
     @Transactional
-    public GameRound addRound(GameRound round) {
-        
-        final String GET_NEXT_GAME_ROUND_ID = "SELECT IFNULL(MAX(roundId), 1) " +
-                "FROM gameround " +
+    public GameRound addLosingRound(GameRound round) {
+        return addRound(round);
+    }
+    
+    /**
+     * Adds a round to the database and updates game status to finished in one
+     * transaction
+     * @param round - GameRound object to add to the database
+     * @return - GameRound object added to the database
+     */
+    @Override
+    @Transactional
+    public GameRound addWinningRound(GameRound round){
+        final String UPDATE_GAME_TO_FINISHED = "UPDATE game " +
+                "SET status = ? " +
                 "WHERE gameId = ?;";
-        int roundId = jdbcTemplate.queryForObject(GET_NEXT_GAME_ROUND_ID, Integer.class, round.getGameId());
-        round.setRoundId(roundId);
-        
-        final String INSERT_ROUND = "INSERT INTO gameround(roundId, gameId, guess, guessTime, guessResult) "
-                + "VALUES (?, ?, ?, ?, ?);";
-        
-        jdbcTemplate.update(INSERT_ROUND,
-                round.getRoundId(),
-                round.getGameId(),
-                round.getGuess(),
-                round.getGuessTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")),
-                round.getGuessResult());
-        
-        return round;
+        final String FINISHED_STATUS = "Finished";
+        jdbcTemplate.update(UPDATE_GAME_TO_FINISHED,
+                FINISHED_STATUS,
+                round.getGameId());
+        return addRound(round);
     }
     
     /**
@@ -157,4 +164,31 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
             return round;
         }
     }
+    
+    /**
+     * Adds a round to the database after getting the next valid round ID for
+     * the game.
+     * @param round - GameRound object to add to the database
+     * @return - GameRound object added to the database
+     */
+    private GameRound addRound(GameRound round){
+        final String GET_NEXT_GAME_ROUND_ID = "SELECT IFNULL(MAX(roundId)+1, 1) " +
+                "FROM gameround " +
+                "WHERE gameId = ?;";
+        int roundId = jdbcTemplate.queryForObject(GET_NEXT_GAME_ROUND_ID, Integer.class, round.getGameId());
+        round.setRoundId(roundId);
+        
+        final String INSERT_ROUND = "INSERT INTO gameround(roundId, gameId, guess, guessTime, guessResult) "
+                + "VALUES (?, ?, ?, ?, ?);";
+        
+        jdbcTemplate.update(INSERT_ROUND,
+                round.getRoundId(),
+                round.getGameId(),
+                round.getGuess(),
+                round.getGuessTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+                round.getGuessResult());
+        
+        return round;
+    }
+    
 }

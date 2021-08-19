@@ -42,15 +42,24 @@ public class GuessTheNumberServiceImpl implements GuessTheNumberService {
 
     @Override
     public GameRound submitGuess(int guess, Game game) {
+        
+        // Evaluate guess
         String guessResult = generateGuessResult(guess, game.getAnswer());
         
+        // Create GameRound object
         GameRound round = new GameRound();
         round.setGameId(game.getGameId());
         round.setGuess(guess);
         round.setGuessResult(guessResult);
         round.setGuessTime(LocalTime.now());
         
-        return dao.addRound(round);
+        // Add GuessRound to DB and update Game if correct guess
+        if (guessResult.equals("e:4:p:0")){
+            return dao.addWinningRound(round);
+        }
+        else{
+            return dao.addLosingRound(round);
+        }
     }
 
     @Override

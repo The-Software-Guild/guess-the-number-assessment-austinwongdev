@@ -50,19 +50,16 @@ public class GuessTheNumberController {
      * Makes a guess by passing guess and gameId in as JSON
      * Calculates results of guess and marks game finished if correct
      * @param guess - Integer representing 4-digit guess
-     * @param gameId - Integer representing ID of game to submit guess
      * @return - GameRound object with results filled in
      */
     @PostMapping("/guess")
-    public ResponseEntity<GameRound> makeGuess(
-            @RequestBody int guess,
-            @RequestBody int gameId){
+    public ResponseEntity<GameRound> makeGuess(@RequestBody GameRound guess){
         
-        Game game = service.getGame(gameId);
+        Game game = service.getGame(guess.getGameId());
         if (game == null){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        GameRound round = service.submitGuess(guess, game);
+        GameRound round = service.submitGuess(guess.getGuess(), game);
         return ResponseEntity.ok(round);
     }
     
@@ -72,6 +69,8 @@ public class GuessTheNumberController {
      */
     @GetMapping("/game")
     public List<Game> getAllGames(){
+        List<Game> games = service.getAllGames();
+        games.forEach(game -> hideInProgressAnswers(game));
         return service.getAllGames();
     }
     
@@ -86,6 +85,7 @@ public class GuessTheNumberController {
         if (game == null){
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
+        hideInProgressAnswers(game);
         return ResponseEntity.ok(game);
     }
     
@@ -104,6 +104,16 @@ public class GuessTheNumberController {
         }
         List<GameRound> rounds = service.getRounds(game);
         return ResponseEntity.ok(rounds);
+    }
+    
+    /**
+     * Sets game's answer to 0 if status is "In Progress"
+     * @param game - Game object
+     */
+    private void hideInProgressAnswers(Game game){
+        if (game.getStatus().equals("In Progress")){
+            game.setAnswer(0);
+        }
     }
     
 }

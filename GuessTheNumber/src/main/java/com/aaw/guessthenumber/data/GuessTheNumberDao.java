@@ -19,7 +19,9 @@ public interface GuessTheNumberDao {
 
     int addGame(Game game);
     
-    GameRound addRound(GameRound round);
+    GameRound addLosingRound(GameRound round);
+    
+    GameRound addWinningRound(GameRound round);
     
     List<Game> getAllGames();
     
