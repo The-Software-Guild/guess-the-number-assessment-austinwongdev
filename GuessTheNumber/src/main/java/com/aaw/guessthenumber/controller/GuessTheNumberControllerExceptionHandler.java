@@ -30,7 +30,7 @@ public class GuessTheNumberControllerExceptionHandler extends ResponseEntityExce
             + "Please ensure gameId is valid and try again.";
     
     @ExceptionHandler(NullPointerException.class)
-    public final ResponseEntity<Error> handleSqlException(
+    public final ResponseEntity<Error> handleNullPointerException(
             NullPointerException ex,
             WebRequest request){
         

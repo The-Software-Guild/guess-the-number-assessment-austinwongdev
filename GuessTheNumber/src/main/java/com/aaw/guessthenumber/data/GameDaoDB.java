@@ -89,7 +89,7 @@ public class GameDaoDB implements GameDao {
         return jdbc.queryForObject(GET_GAME, new GameMapper(), gameId);
     }
     
-    private final class GameMapper implements RowMapper<Game>{
+    private static final class GameMapper implements RowMapper<Game>{
         
         @Override
         public Game mapRow(ResultSet rs, int index) throws SQLException{

@@ -82,7 +82,7 @@ public class GameRoundDaoDB implements GameRoundDao {
         return jdbc.query(GET_GAME_ROUNDS, new RoundMapper(), game.getGameId());
     }
     
-    private final class RoundMapper implements RowMapper<GameRound>{
+    private static final class RoundMapper implements RowMapper<GameRound>{
         
         @Override
         public GameRound mapRow(ResultSet rs, int index) throws SQLException{
