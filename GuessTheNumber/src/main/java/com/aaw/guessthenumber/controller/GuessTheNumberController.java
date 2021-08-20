@@ -12,7 +12,6 @@ import com.aaw.guessthenumber.model.GameRound;
 import com.aaw.guessthenumber.service.GuessTheNumberService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

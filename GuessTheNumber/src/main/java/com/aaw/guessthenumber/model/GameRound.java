@@ -8,6 +8,7 @@
 package com.aaw.guessthenumber.model;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  *
@@ -60,5 +61,48 @@ public class GameRound {
     public void setGuessResult(String guessResult) {
         this.guessResult = guessResult;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + this.roundId;
+        hash = 79 * hash + this.gameId;
+        hash = 79 * hash + Objects.hashCode(this.guess);
+        hash = 79 * hash + Objects.hashCode(this.guessTime);
+        hash = 79 * hash + Objects.hashCode(this.guessResult);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GameRound other = (GameRound) obj;
+        if (this.roundId != other.roundId) {
+            return false;
+        }
+        if (this.gameId != other.gameId) {
+            return false;
+        }
+        if (!Objects.equals(this.guess, other.guess)) {
+            return false;
+        }
+        if (!Objects.equals(this.guessResult, other.guessResult)) {
+            return false;
+        }
+        if (!Objects.equals(this.guessTime, other.guessTime)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }

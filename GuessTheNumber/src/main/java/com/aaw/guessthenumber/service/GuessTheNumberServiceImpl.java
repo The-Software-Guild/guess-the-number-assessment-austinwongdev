@@ -7,7 +7,8 @@
 
 package com.aaw.guessthenumber.service;
 
-import com.aaw.guessthenumber.data.GuessTheNumberDao;
+import com.aaw.guessthenumber.data.GameDao;
+import com.aaw.guessthenumber.data.GameRoundDao;
 import com.aaw.guessthenumber.model.Game;
 import com.aaw.guessthenumber.model.GameRound;
 import java.time.LocalTime;
@@ -25,11 +26,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class GuessTheNumberServiceImpl implements GuessTheNumberService {
 
-    private final GuessTheNumberDao dao;
+    private final GameDao gameDao;
+    private final GameRoundDao gameRoundDao;
     
     @Autowired
-    public GuessTheNumberServiceImpl(GuessTheNumberDao dao){
-        this.dao = dao;
+    public GuessTheNumberServiceImpl(GameDao gameDao, GameRoundDao gameRoundDao){
+        this.gameDao = gameDao;
+        this.gameRoundDao = gameRoundDao;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class GuessTheNumberServiceImpl implements GuessTheNumberService {
         Game game = new Game();
         game.setStatus("In Progress");
         game.setAnswer(generateAnswer());
-        return dao.addGame(game);
+        return gameDao.addGame(game);
     }
 
     @Override
@@ -55,26 +58,26 @@ public class GuessTheNumberServiceImpl implements GuessTheNumberService {
         
         // Add GuessRound to DB and update Game if correct guess
         if (guessResult.equals("e:4:p:0")){
-            return dao.addWinningRound(round);
+            return gameRoundDao.addWinningRound(round);
         }
         else{
-            return dao.addLosingRound(round);
+            return gameRoundDao.addLosingRound(round);
         }
     }
 
     @Override
     public List<Game> getAllGames() {
-        return dao.getAllGames();
+        return gameDao.getAllGames();
     }
 
     @Override
     public Game getGame(int gameId) {
-        return dao.getGame(gameId);
+        return gameDao.getGame(gameId);
     }
 
     @Override
     public List<GameRound> getRounds(Game game) {
-        return dao.getRounds(game);
+        return gameRoundDao.getRounds(game);
     }
     
     /**

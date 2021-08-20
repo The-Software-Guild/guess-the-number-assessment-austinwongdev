@@ -1,7 +1,7 @@
 /*
  * @author Austin Wong
  * email: austinwongdev@gmail.com
- * date: Aug 18, 2021
+ * date: Aug 19, 2021
  * purpose: 
  */
 
@@ -15,17 +15,11 @@ import java.util.List;
  *
  * @author Austin Wong
  */
-public interface GuessTheNumberDao {
-
-    int addGame(Game game);
+public interface GameRoundDao {
     
     GameRound addLosingRound(GameRound round);
     
     GameRound addWinningRound(GameRound round);
-    
-    List<Game> getAllGames();
-    
-    Game getGame(int gameId);
     
     List<GameRound> getRounds(Game game);
     
