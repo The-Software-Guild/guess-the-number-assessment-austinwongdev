@@ -19,7 +19,7 @@ public interface GuessTheNumberService {
 
     int createAndAddGame();
     
-    GameRound submitGuess(int guess, Game game);
+    GameRound submitGuess(String guess, Game game);
     
     List<Game> getAllGames();
     

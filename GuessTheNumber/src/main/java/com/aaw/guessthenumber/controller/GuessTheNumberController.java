@@ -12,6 +12,7 @@ import com.aaw.guessthenumber.model.GameRound;
 import com.aaw.guessthenumber.service.GuessTheNumberService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,9 +57,6 @@ public class GuessTheNumberController {
     public ResponseEntity<GameRound> makeGuess(@RequestBody GameRound guess){
         
         Game game = service.getGame(guess.getGameId());
-        if (game == null){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
         GameRound round = service.submitGuess(guess.getGuess(), game);
         return ResponseEntity.ok(round);
     }
@@ -71,7 +69,7 @@ public class GuessTheNumberController {
     public List<Game> getAllGames(){
         List<Game> games = service.getAllGames();
         games.forEach(game -> hideInProgressAnswers(game));
-        return service.getAllGames();
+        return games;
     }
     
     /**
@@ -82,9 +80,6 @@ public class GuessTheNumberController {
     @GetMapping("/game/{gameId}")
     public ResponseEntity<Game> getGameById(@PathVariable int gameId){
         Game game = service.getGame(gameId);
-        if (game == null){
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        }
         hideInProgressAnswers(game);
         return ResponseEntity.ok(game);
     }
@@ -99,20 +94,17 @@ public class GuessTheNumberController {
             @PathVariable int gameId){
         
         Game game = service.getGame(gameId);
-        if (game == null){
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        }
         List<GameRound> rounds = service.getRounds(game);
         return ResponseEntity.ok(rounds);
     }
     
     /**
-     * Sets game's answer to 0 if status is "In Progress"
+     * Sets game's answer to "Hidden" if status is "In Progress"
      * @param game - Game object
      */
     private void hideInProgressAnswers(Game game){
         if (game.getStatus().equals("In Progress")){
-            game.setAnswer(0);
+            game.setAnswer("Hidden");
         }
     }
     

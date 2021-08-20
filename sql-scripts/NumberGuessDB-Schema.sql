@@ -9,7 +9,7 @@ USE NumberGuessDB;
 
 CREATE TABLE game(
 	gameId INT NOT NULL AUTO_INCREMENT,
-    answer SMALLINT NOT NULL,
+    answer CHAR(4) NOT NULL,
     status VARCHAR(15) NOT NULL,
     CONSTRAINT pk_game PRIMARY KEY (gameId)
 );
@@ -17,7 +17,7 @@ CREATE TABLE game(
 CREATE TABLE gameround(
 	roundId INT NOT NULL,
     gameId INT NOT NULL,
-    guess SMALLINT NOT NULL,
+    guess CHAR(4) NOT NULL,
     guessTime TIME NOT NULL,
     guessResult CHAR(7) NOT NULL,
     CONSTRAINT pk_round PRIMARY KEY (roundId, gameId),

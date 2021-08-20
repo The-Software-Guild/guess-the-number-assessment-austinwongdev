@@ -41,7 +41,7 @@ public class GuessTheNumberServiceImpl implements GuessTheNumberService {
     }
 
     @Override
-    public GameRound submitGuess(int guess, Game game) {
+    public GameRound submitGuess(String guess, Game game) {
         
         // Evaluate guess
         String guessResult = generateGuessResult(guess, game.getAnswer());
@@ -79,9 +79,9 @@ public class GuessTheNumberServiceImpl implements GuessTheNumberService {
     
     /**
      * Generates an answer with 4 unique random digits
-     * @return - 4-digit integer
+     * @return - 4-digit number as String
      */
-    private int generateAnswer() {
+    private String generateAnswer() {
         List<Integer> availableNums = new ArrayList<>();
         for (int i=0; i<10; i++){
             availableNums.add(i);
@@ -91,28 +91,26 @@ public class GuessTheNumberServiceImpl implements GuessTheNumberService {
         while (answer.length() < 4){
             answer += availableNums.remove(rand.nextInt(availableNums.size()));
         }
-        return Integer.parseInt(answer);
+        return answer;
     }
     
     /**
      * Compares guess to answer, returning a result indicating number of exact
      * matches and number of partial matches in format "e:#:p:#"
-     * @param guess - Integer value of 4-digit guess
-     * @param answer - Integer value of 4-digit answer
+     * @param guess - String value of 4-digit guess
+     * @param answer - String value of 4-digit answer
      * @return 7-character String indicating number of exact and partial matches
      */
-    private String generateGuessResult(int guess, int answer) {
+    private String generateGuessResult(String guess, String answer) {
         
         int exactMatches = 0;
         int partialMatches = 0;
-        String guessStr = String.valueOf(guess);
-        String answerStr = String.valueOf(answer);
         
-        for (int i=0; i<guessStr.length(); i++){
-            if (guessStr.charAt(i) == answerStr.charAt(i)){
+        for (int i=0; i<answer.length(); i++){
+            if (guess.charAt(i) == answer.charAt(i)){
                 exactMatches += 1;
             }
-            else if (answerStr.contains(String.valueOf(guessStr.charAt(i)))){
+            else if (answer.contains(String.valueOf(guess.charAt(i)))){
                 partialMatches += 1;
             }
         }

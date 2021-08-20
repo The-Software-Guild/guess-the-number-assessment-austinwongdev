@@ -17,7 +17,7 @@ public class GameRound {
 
     private int roundId;
     private int gameId;
-    private int guess;
+    private String guess;
     private LocalTime guessTime;
     private String guessResult;
 
@@ -37,11 +37,11 @@ public class GameRound {
         this.gameId = gameId;
     }
 
-    public int getGuess() {
+    public String getGuess() {
         return guess;
     }
 
-    public void setGuess(int guess) {
+    public void setGuess(String guess) {
         this.guess = guess;
     }
 

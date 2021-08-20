@@ -14,7 +14,7 @@ package com.aaw.guessthenumber.model;
 public class Game {
 
     private int gameId;
-    private int answer;
+    private String answer;
     private String status;
 
     public int getGameId() {
@@ -25,11 +25,11 @@ public class Game {
         this.gameId = gameId;
     }
 
-    public int getAnswer() {
+    public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(int answer) {
+    public void setAnswer(String answer) {
         this.answer = answer;
     }
 

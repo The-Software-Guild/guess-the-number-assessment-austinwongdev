@@ -59,7 +59,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
                     INSERT_GAME,
                     Statement.RETURN_GENERATED_KEYS);
             
-            statement.setInt(1, game.getAnswer());
+            statement.setString(1, game.getAnswer());
             statement.setString(2, game.getStatus());
             return statement;
         }, keyHolder);
@@ -144,7 +144,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
             
             Game game = new Game();
             game.setGameId(rs.getInt("gameId"));
-            game.setAnswer(rs.getInt("answer"));
+            game.setAnswer(rs.getString("answer"));
             game.setStatus(rs.getString("status"));
             return game;
             
@@ -158,7 +158,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
             GameRound round = new GameRound();
             round.setGameId(rs.getInt("gameId"));
             round.setRoundId(rs.getInt("roundId"));
-            round.setGuess(rs.getInt("guess"));
+            round.setGuess(rs.getString("guess"));
             round.setGuessResult(rs.getString("guessResult"));
             round.setGuessTime(rs.getTime("guessTime").toLocalTime());
             return round;
