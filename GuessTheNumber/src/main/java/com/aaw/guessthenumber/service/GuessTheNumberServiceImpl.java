@@ -54,7 +54,7 @@ public class GuessTheNumberServiceImpl implements GuessTheNumberService {
         round.setGameId(game.getGameId());
         round.setGuess(guess);
         round.setGuessResult(guessResult);
-        round.setGuessTime(LocalTime.now());
+        round.setGuessTime(LocalTime.now().withNano(0));
         
         // Add GuessRound to DB and update Game if correct guess
         if (guessResult.equals("e:4:p:0")){
